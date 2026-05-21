@@ -1,6 +1,6 @@
 [
   {
-    "updatedAt": "2026-05-21T19:10:25.699Z",
+    "updatedAt": "2026-05-21T20:54:43.000Z",
     "createdAt": "2026-05-21T17:39:54.950Z",
     "id": "lMBmHIYuZuRPrz3L",
     "name": "auto-update-workflow-documentation-github",
@@ -325,26 +325,23 @@
     "pinData": {},
     "versionId": "6977e63a-ca72-4915-925b-40fffa885269",
     "activeVersionId": "6977e63a-ca72-4915-925b-40fffa885269",
-    "versionCounter": 25,
+    "versionCounter": 27,
     "triggerCount": 1,
     "shared": [
       {
-        "updatedAt": "2026-05-21T17:39:54.953Z",
-        "createdAt": "2026-05-21T17:39:54.953Z",
+        "updatedAt": "2026-05-21T20:54:43.252Z",
+        "createdAt": "2026-05-21T20:54:43.252Z",
         "role": "workflow:owner",
         "workflowId": "lMBmHIYuZuRPrz3L",
-        "projectId": "XuyYL8PsGDCQnc0d",
+        "projectId": "vIaIDcGye5gviyqQ",
         "project": {
-          "updatedAt": "2026-05-19T21:34:37.000Z",
-          "createdAt": "2026-05-19T21:32:51.035Z",
-          "id": "XuyYL8PsGDCQnc0d",
-          "name": "functionality",
-          "type": "team",
-          "icon": {
-            "type": "icon",
-            "value": "layers"
-          },
-          "description": "This project consists of all workflow with basic functionality for a solid working n8n setup",
+          "updatedAt": "2026-05-15T12:25:59.943Z",
+          "createdAt": "2026-05-15T12:25:51.939Z",
+          "id": "vIaIDcGye5gviyqQ",
+          "name": "Sören Panten <pantensoeren@gmail.com>",
+          "type": "personal",
+          "icon": null,
+          "description": null,
           "creatorId": "048b10ea-fb35-4264-a7fb-902c17d261d2"
         }
       }
