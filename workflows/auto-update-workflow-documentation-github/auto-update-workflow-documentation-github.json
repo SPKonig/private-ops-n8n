@@ -1,6 +1,6 @@
 [
   {
-    "updatedAt": "2026-05-21T18:25:41.758Z",
+    "updatedAt": "2026-05-21T19:10:25.699Z",
     "createdAt": "2026-05-21T17:39:54.950Z",
     "id": "lMBmHIYuZuRPrz3L",
     "name": "auto-update-workflow-documentation-github",
@@ -315,7 +315,8 @@
       "availableInMCP": false,
       "timeSavedMode": "fixed",
       "callerPolicy": "workflowsFromSameOwner",
-      "timeSavedPerExecution": 10
+      "timeSavedPerExecution": 10,
+      "errorWorkflow": "hmJldT9kg1FuUJhz"
     },
     "staticData": null,
     "meta": {
@@ -324,7 +325,7 @@
     "pinData": {},
     "versionId": "6977e63a-ca72-4915-925b-40fffa885269",
     "activeVersionId": "6977e63a-ca72-4915-925b-40fffa885269",
-    "versionCounter": 22,
+    "versionCounter": 25,
     "triggerCount": 1,
     "shared": [
       {
@@ -686,6 +687,14 @@
           "userId": "048b10ea-fb35-4264-a7fb-902c17d261d2"
         },
         {
+          "createdAt": "2026-05-21T19:10:25.923Z",
+          "id": 35,
+          "workflowId": "lMBmHIYuZuRPrz3L",
+          "versionId": "6977e63a-ca72-4915-925b-40fffa885269",
+          "event": "activated",
+          "userId": "048b10ea-fb35-4264-a7fb-902c17d261d2"
+        },
+        {
           "createdAt": "2026-05-21T18:25:41.822Z",
           "id": 23,
           "workflowId": "lMBmHIYuZuRPrz3L",
@@ -696,6 +705,14 @@
         {
           "createdAt": "2026-05-21T18:33:15.356Z",
           "id": 25,
+          "workflowId": "lMBmHIYuZuRPrz3L",
+          "versionId": "6977e63a-ca72-4915-925b-40fffa885269",
+          "event": "deactivated",
+          "userId": "048b10ea-fb35-4264-a7fb-902c17d261d2"
+        },
+        {
+          "createdAt": "2026-05-21T19:10:25.760Z",
+          "id": 34,
           "workflowId": "lMBmHIYuZuRPrz3L",
           "versionId": "6977e63a-ca72-4915-925b-40fffa885269",
           "event": "deactivated",
