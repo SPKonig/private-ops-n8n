@@ -1,6 +1,6 @@
 # auto-update-workflow-documentation-github
 
-Automatically generates and updates workflow documentation in GitHub whenever an n8n workflow is published or updated, including both JSON backup and README.md generation.
+Automatically generates and updates GitHub documentation for n8n workflows when they are modified, including JSON backups and README.md files with AI-generated technical documentation.
 
 ## Overview
 
@@ -8,12 +8,12 @@ Automatically generates and updates workflow documentation in GitHub whenever an
 - **Status:** Active
 - **Created:** 21.05.2026
 - **Last Modified:** 21.05.2026
-- **Project:** functionality
+- **Project:** Sören Panten <pantensoeren@gmail.com>
 - **URL:** [https://private-ops.app.n8n.cloud/workflow/lMBmHIYuZuRPrz3L](https://private-ops.app.n8n.cloud/workflow/lMBmHIYuZuRPrz3L)
 
 ## Trigger
 
-The workflow is triggered whenever a workflow is **updated** in n8n, captured by the **Published Workflow Updated** trigger node.
+The workflow is triggered whenever a published workflow is updated in the n8n system, detected by the **Published Workflow Updated** node monitoring `update` events.
 
 ## Workflow Steps
 
@@ -23,28 +23,27 @@ The workflow is triggered whenever a workflow is **updated** in n8n, captured by
 
 **2. Get Workflow**
 - **Type:** `n8n-nodes-base.n8n`
-- **Function:** Retrieves the complete workflow data from n8n using the workflow ID provided by the trigger.
+- **Function:** Retrieves the complete workflow data from the n8n API using the workflow ID provided by the trigger.
 
 **3. Convert to JSON**
 - **Type:** `n8n-nodes-base.convertToFile`
-- **Function:** Converts the retrieved workflow data into a formatted JSON file for backup purposes.
+- **Function:** Converts the workflow data into a formatted JSON file for backup purposes.
 
 **4. Remove credentials**
 - **Type:** `n8n-nodes-base.code`
-- **Function:** Executes JavaScript to strip sensitive credential information from the workflow data before documentation generation.
+- **Function:** Executes JavaScript code to strip sensitive credential information from the workflow data before processing.
 
 **5. Update JSON backup**
 - **Type:** `n8n-nodes-base.github`
-- **Function:** Commits the sanitized JSON file to GitHub as a backup in the repository `private-ops-n8n`.
+- **Function:** Commits the sanitized workflow JSON to GitHub as a backup file in the repository.
 
 **6. Create README**
 - **Type:** `@n8n/n8n-nodes-langchain.chainLlm`
-- **Function:** Uses AI models (Mistral and Claude) to generate a structured README.md file based on the workflow data.
-- **Notes:** Uses both `mistral-medium-latest` and `Claude Sonnet 4.6` as fallback models for documentation generation.
+- **Function:** Uses AI (Mistral or Claude) to generate comprehensive README.md documentation based on the workflow data.
 
 **7. Update README.md**
 - **Type:** `n8n-nodes-base.github`
-- **Function:** Commits the generated README.md to GitHub in the corresponding workflow directory.
+- **Function:** Commits the AI-generated README.md documentation to GitHub in the corresponding workflow directory.
 
 ## Connected Systems
 
