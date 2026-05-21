@@ -1,6 +1,6 @@
 # auto-update-workflow-documentation-github
 
-Automatically generates and updates workflow documentation in GitHub whenever an n8n workflow is modified, maintaining both JSON backups and human-readable README files.
+Automatically generates and updates workflow documentation in GitHub whenever an n8n workflow is published or updated, including both JSON backup and README.md generation.
 
 ## Overview
 
@@ -13,37 +13,38 @@ Automatically generates and updates workflow documentation in GitHub whenever an
 
 ## Trigger
 
-The workflow is triggered by the **Published Workflow Updated** event, which fires whenever any workflow in the n8n instance is updated.
+The workflow is triggered whenever a workflow is **updated** in n8n, captured by the **Published Workflow Updated** trigger node.
 
 ## Workflow Steps
 
 **1. Published Workflow Updated**
 - **Type:** `n8n-nodes-base.n8nTrigger`
-- **Function:** Captures workflow update events and initiates the documentation process
+- **Function:** Listens for workflow update events and initiates the documentation process with the updated workflow ID.
 
 **2. Get Workflow**
 - **Type:** `n8n-nodes-base.n8n`
-- **Function:** Retrieves the complete workflow data including all nodes, connections, and metadata
+- **Function:** Retrieves the complete workflow data from n8n using the workflow ID provided by the trigger.
 
 **3. Convert to JSON**
 - **Type:** `n8n-nodes-base.convertToFile`
-- **Function:** Converts the workflow data to a formatted JSON file for backup purposes
+- **Function:** Converts the retrieved workflow data into a formatted JSON file for backup purposes.
 
 **4. Remove credentials**
 - **Type:** `n8n-nodes-base.code`
-- **Function:** Strips sensitive credential information from the workflow data before documentation generation
+- **Function:** Executes JavaScript to strip sensitive credential information from the workflow data before documentation generation.
 
-**5. Create README**
-- **Type:** `@n8n/n8n-nodes-langchain.chainLlm`
-- **Function:** Generates comprehensive README documentation using AI models (Mistral and Claude) based on the workflow structure
-
-**6. Update JSON backup**
+**5. Update JSON backup**
 - **Type:** `n8n-nodes-base.github`
-- **Function:** Commits the cleaned JSON backup to GitHub repository
+- **Function:** Commits the sanitized JSON file to GitHub as a backup in the repository `private-ops-n8n`.
+
+**6. Create README**
+- **Type:** `@n8n/n8n-nodes-langchain.chainLlm`
+- **Function:** Uses AI models (Mistral and Claude) to generate a structured README.md file based on the workflow data.
+- **Notes:** Uses both `mistral-medium-latest` and `Claude Sonnet 4.6` as fallback models for documentation generation.
 
 **7. Update README.md**
 - **Type:** `n8n-nodes-base.github`
-- **Function:** Commits the generated README documentation to GitHub repository
+- **Function:** Commits the generated README.md to GitHub in the corresponding workflow directory.
 
 ## Connected Systems
 
