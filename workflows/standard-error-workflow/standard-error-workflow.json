@@ -1,0 +1,270 @@
+[
+  {
+    "updatedAt": "2026-05-21T21:49:02.195Z",
+    "createdAt": "2026-05-17T07:53:15.397Z",
+    "id": "hmJldT9kg1FuUJhz",
+    "name": "standard-error-workflow",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "34f541cd-5198-4ded-89bf-4484125d5e25",
+        "name": "Error Trigger"
+      },
+      {
+        "parameters": {
+          "chatId": "8325665200",
+          "text": "=🔴 *FEHLER — Workflow abgebrochen*\n\n📋 *Workflow:* {{ $json.workflow.name }} - {{ $json.workflow.id }} \n🔧 *Node:* {{ $json.execution.lastNodeExecuted }}\n❌ *Fehler:* {{ $json.execution.error.message }}\n🔗 {{ $json.execution.url }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          448,
+          0
+        ],
+        "id": "9913e665-8ac7-4a68-a9b5-2677a211d5db",
+        "name": "Chris",
+        "webhookId": "95f96555-573b-43d8-a1f9-9432ffad2cac",
+        "credentials": {
+          "telegramApi": {
+            "id": "eIIr6ghV6G91HdKx",
+            "name": "chris_error_bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "0a9fa2cb-a53d-4d2e-85ef-375f9d1858b2",
+                "name": "workflow.name",
+                "value": "={{ $json.workflow.name }}",
+                "type": "string"
+              },
+              {
+                "id": "77a3ca82-18f6-45d1-8202-4b0be22a69b8",
+                "name": "workflow.id",
+                "value": "={{ $json.workflow.id }}",
+                "type": "string"
+              },
+              {
+                "id": "edc47e4a-9ce9-48b4-aade-e896a4326d90",
+                "name": "execution.lastNodeExecuted",
+                "value": "={{ $json.execution.lastNodeExecuted }}",
+                "type": "string"
+              },
+              {
+                "id": "f16c0e54-11e1-4372-b3f1-5c911a15872b",
+                "name": "execution.error.message",
+                "value": "={{ $json.execution.error.message }}",
+                "type": "string"
+              },
+              {
+                "id": "77b90c0a-01df-46c7-bacb-ea239ea04487",
+                "name": "execution.id",
+                "value": "={{ $json.execution.id }}",
+                "type": "number"
+              },
+              {
+                "id": "dac5e455-8b7c-41f8-be7f-fcc5af2e844d",
+                "name": "execution.url",
+                "value": "={{ $json.execution.url }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          224,
+          0
+        ],
+        "id": "7d0f3abe-f7b4-4129-bb94-6d6c4e49aaf3",
+        "name": "Extract Error Information"
+      }
+    ],
+    "connections": {
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Extract Error Information",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract Error Information": {
+        "main": [
+          [
+            {
+              "node": "Chris",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "binaryMode": "separate",
+      "timeSavedMode": "fixed",
+      "callerPolicy": "workflowsFromSameOwner",
+      "availableInMCP": false,
+      "timeSavedPerExecution": 10
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "13eb0df8-f82f-411c-995d-090e7f7aa9bd",
+    "activeVersionId": "13eb0df8-f82f-411c-995d-090e7f7aa9bd",
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2026-05-21T20:55:00.655Z",
+        "createdAt": "2026-05-21T20:55:00.655Z",
+        "role": "workflow:owner",
+        "workflowId": "hmJldT9kg1FuUJhz",
+        "projectId": "vIaIDcGye5gviyqQ"
+      }
+    ],
+    "activeVersion": {
+      "updatedAt": "2026-05-21T22:07:10.000Z",
+      "createdAt": "2026-05-21T21:49:00.312Z",
+      "versionId": "13eb0df8-f82f-411c-995d-090e7f7aa9bd",
+      "workflowId": "hmJldT9kg1FuUJhz",
+      "nodes": [
+        {
+          "parameters": {},
+          "type": "n8n-nodes-base.errorTrigger",
+          "typeVersion": 1,
+          "position": [
+            0,
+            0
+          ],
+          "id": "34f541cd-5198-4ded-89bf-4484125d5e25",
+          "name": "Error Trigger"
+        },
+        {
+          "parameters": {
+            "chatId": "8325665200",
+            "text": "=🔴 *FEHLER — Workflow abgebrochen*\n\n📋 *Workflow:* {{ $json.workflow.name }} - {{ $json.workflow.id }} \n🔧 *Node:* {{ $json.execution.lastNodeExecuted }}\n❌ *Fehler:* {{ $json.execution.error.message }}\n🔗 {{ $json.execution.url }}",
+            "additionalFields": {}
+          },
+          "type": "n8n-nodes-base.telegram",
+          "typeVersion": 1.2,
+          "position": [
+            448,
+            0
+          ],
+          "id": "9913e665-8ac7-4a68-a9b5-2677a211d5db",
+          "name": "Chris",
+          "webhookId": "95f96555-573b-43d8-a1f9-9432ffad2cac",
+          "credentials": {
+            "telegramApi": {
+              "id": "eIIr6ghV6G91HdKx",
+              "name": "chris_error_bot"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "0a9fa2cb-a53d-4d2e-85ef-375f9d1858b2",
+                  "name": "workflow.name",
+                  "value": "={{ $json.workflow.name }}",
+                  "type": "string"
+                },
+                {
+                  "id": "77a3ca82-18f6-45d1-8202-4b0be22a69b8",
+                  "name": "workflow.id",
+                  "value": "={{ $json.workflow.id }}",
+                  "type": "string"
+                },
+                {
+                  "id": "edc47e4a-9ce9-48b4-aade-e896a4326d90",
+                  "name": "execution.lastNodeExecuted",
+                  "value": "={{ $json.execution.lastNodeExecuted }}",
+                  "type": "string"
+                },
+                {
+                  "id": "f16c0e54-11e1-4372-b3f1-5c911a15872b",
+                  "name": "execution.error.message",
+                  "value": "={{ $json.execution.error.message }}",
+                  "type": "string"
+                },
+                {
+                  "id": "77b90c0a-01df-46c7-bacb-ea239ea04487",
+                  "name": "execution.id",
+                  "value": "={{ $json.execution.id }}",
+                  "type": "number"
+                },
+                {
+                  "id": "dac5e455-8b7c-41f8-be7f-fcc5af2e844d",
+                  "name": "execution.url",
+                  "value": "={{ $json.execution.url }}",
+                  "type": "string"
+                }
+              ]
+            },
+            "options": {}
+          },
+          "type": "n8n-nodes-base.set",
+          "typeVersion": 3.4,
+          "position": [
+            224,
+            0
+          ],
+          "id": "7d0f3abe-f7b4-4129-bb94-6d6c4e49aaf3",
+          "name": "Extract Error Information"
+        }
+      ],
+      "connections": {
+        "Error Trigger": {
+          "main": [
+            [
+              {
+                "node": "Extract Error Information",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Extract Error Information": {
+          "main": [
+            [
+              {
+                "node": "Chris",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      },
+      "authors": "Sören Panten",
+      "name": "v1.0",
+      "description": "Initial publish",
+      "autosaved": true
+    },
+    "tags": []
+  }
+]
