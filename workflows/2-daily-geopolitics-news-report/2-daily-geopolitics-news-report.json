@@ -1,0 +1,2899 @@
+[
+  {
+    "updatedAt": "2026-05-24T10:39:57.496Z",
+    "createdAt": "2026-05-15T14:52:44.966Z",
+    "id": "AKEWhsWFux9gSZBS",
+    "name": "2-daily-geopolitics-news-report",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8
+              },
+              {
+                "triggerAtHour": 19
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -880,
+          2544
+        ],
+        "id": "728bb2db-91bc-49bf-9a72-98b88ea17047",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "url": "https://rss.nytimes.com/services/xml/rss/nyt/World.xm",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          1184
+        ],
+        "id": "387ac258-bb3f-41c5-b1f5-e7446b39b0be",
+        "name": "RSS NYT World",
+        "alwaysOutputData": false,
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://rss.nytimes.com/services/xml/rss/nyt/Americas.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          1472
+        ],
+        "id": "ad826cb6-dd89-42bf-b5d6-d49fef1381d4",
+        "name": "RSS NYT Americas",
+        "alwaysOutputData": false,
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://rss.nytimes.com/services/xml/rss/nyt/Africa.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          1328
+        ],
+        "id": "4378cc4e-2c29-4bfd-a7fb-42d5575f2843",
+        "name": "RSS NYT Africa",
+        "alwaysOutputData": false,
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://rss.nytimes.com/services/xml/rss/nyt/AsiaPacific.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          1616
+        ],
+        "id": "df3b3b98-2391-4a2e-954a-22723eca5d38",
+        "name": "RSS NYT AsiaPacific",
+        "alwaysOutputData": false,
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://rss.nytimes.com/services/xml/rss/nyt/Europe.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          1776
+        ],
+        "id": "eb4ec3a0-912d-44dd-b3d8-02689a60c046",
+        "name": "RSS NYT Europe",
+        "alwaysOutputData": false,
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://rss.nytimes.com/services/xml/rss/nyt/MiddleEast.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          1920
+        ],
+        "id": "2b263d30-a111-4a18-a7fd-8a51d25b1a71",
+        "name": "RSS NYT MiddleEast",
+        "alwaysOutputData": false,
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "mode": "combineBySql",
+          "numberInputs": 6,
+          "query": "SELECT title, link, content, isoDate \nFROM input1 \nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input3\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input4\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input5\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input6\nWHERE title IS NOT NULL;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          608,
+          1488
+        ],
+        "id": "d278902b-6e9b-4ee2-b78d-e984e059430e",
+        "name": "Merge NYT"
+      },
+      {
+        "parameters": {
+          "url": "https://feeds.content.dowjones.io/public/rss/RSSWorldNews",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          2080
+        ],
+        "id": "319b3cec-04fc-4e86-83b1-e77309b332bf",
+        "name": "RSS WSJ World News",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://feeds.content.dowjones.io/public/rss/socialpoliticsfeed",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          2224
+        ],
+        "id": "9e8c6d15-1676-447a-9547-889bcf2de1bd",
+        "name": "RSS WSJ Politics",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://feeds.content.dowjones.io/public/rss/RSSUSnews",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          2368
+        ],
+        "id": "ce251491-e7d5-4561-8fa4-d135813790e5",
+        "name": "RSS WSJ US",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://feeds.bbci.co.uk/news/world/asia/rss.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          2704
+        ],
+        "id": "1dff48a9-e1ed-4251-af18-102a30cf234b",
+        "name": "RSS BBC Asia",
+        "alwaysOutputData": false,
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://feeds.bbci.co.uk/news/world/europe/rss.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          2848
+        ],
+        "id": "985e8e61-647d-47d1-a72b-ca352d1122bd",
+        "name": "RSS BBC Europe",
+        "alwaysOutputData": false,
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://feeds.bbci.co.uk/news/world/latin_america/rss.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          2992
+        ],
+        "id": "710ea037-28d0-4fec-b52e-51176fbe0ba7",
+        "name": "RSS BBC Latin America",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          3136
+        ],
+        "id": "a70f126f-ebec-4d7f-a345-bdf57ebe3a97",
+        "name": "RSS BBC Middle East",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://feeds.bbci.co.uk/news/politics/rss.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          3424
+        ],
+        "id": "120de3b6-7b4a-4128-a99d-f3db60d3d4b1",
+        "name": "RSS BBC Politics",
+        "alwaysOutputData": false,
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          3280
+        ],
+        "id": "7d5feecb-a34d-46b7-a28f-d9879edfa460",
+        "name": "RSS BBC US & Canada",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "mode": "combineBySql",
+          "numberInputs": 6,
+          "query": "SELECT title, link, content, isoDate\nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input3\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input4\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input5\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input6\nWHERE title IS NOT NULL;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          624,
+          2992
+        ],
+        "id": "f04b6fc2-3030-4598-8d82-3086fa6cba49",
+        "name": "Merge BBC",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "mode": "combineBySql",
+          "numberInputs": 3,
+          "query": "SELECT title, link, content, isoDate \nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input3\nWHERE title IS NOT NULL;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          624,
+          2208
+        ],
+        "id": "754def1b-2182-4c39-a5a8-83f82b88ab5a",
+        "name": "Merge WSJ"
+      },
+      {
+        "parameters": {
+          "url": "https://www.faz.net/rss/aktuell/politik/usa-unter-trump/",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          3568
+        ],
+        "id": "cea17dc1-4440-40e7-affb-1dbd300f4ebf",
+        "name": "RSS FAZ.NET USA",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://www.faz.net/rss/aktuell/politik/inland/",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          3712
+        ],
+        "id": "5a994f46-ccbd-46ac-8e9c-7b2621897c77",
+        "name": "RSS FAZ.NET Inland",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://www.faz.net/rss/aktuell/politik/ausland/",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          208,
+          3856
+        ],
+        "id": "f08f2143-5cc3-46e6-885f-728b9c56ad9b",
+        "name": "RSS FAZ.NET Ausland",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "mode": "combineBySql",
+          "numberInputs": 3,
+          "query": "SELECT title, link, content, isoDate\nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input3\nWHERE title IS NOT NULL;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          624,
+          3696
+        ],
+        "id": "7998be98-813f-4234-a509-343fb00c90ea",
+        "name": "Merge FAZ.NET"
+      },
+      {
+        "parameters": {
+          "chatId": "8325665200",
+          "text": "=Hier eine kleine Zusammenfassung von aktuellen Nachrichten:\n{{ $json.text }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          3152,
+          2448
+        ],
+        "id": "225babdb-f450-40f1-95b0-a1a775488364",
+        "name": "Send Summary Sören",
+        "webhookId": "241de077-0551-4e96-a0c6-397105bf2588",
+        "retryOnFail": true,
+        "credentials": {
+          "telegramApi": {
+            "id": "wjoVTprWbyLg2GzG",
+            "name": "kevin_geonews_bot"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "chatId": "8887726838",
+          "text": "=Hier eine kleine Zusammenfassung von aktuellen Nachrichten:\n{{ $json.text }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          3152,
+          2656
+        ],
+        "id": "713c1228-22bb-4e7d-a636-b326c2fe6a0b",
+        "name": "Send Summary Susanne",
+        "webhookId": "241de077-0551-4e96-a0c6-397105bf2588",
+        "retryOnFail": true,
+        "credentials": {
+          "telegramApi": {
+            "id": "wjoVTprWbyLg2GzG",
+            "name": "kevin_geonews_bot"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "numberInputs": 4
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          2272,
+          2528
+        ],
+        "id": "9147de0f-62c7-4df1-81b1-bd81478216bb",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          816,
+          1552
+        ],
+        "id": "a8af5cb2-e069-4a23-b651-a0980170de8f",
+        "name": "Aggregate NYT",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          848,
+          2224
+        ],
+        "id": "1642a25e-4e5c-44a8-a7fc-1ea842c0be52",
+        "name": "Aggregate WSJ",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          848,
+          3056
+        ],
+        "id": "c946197d-49d0-40a7-9123-d4c8fb77b72a",
+        "name": "Aggregate BBC",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          864,
+          3712
+        ],
+        "id": "6a4dea4d-4954-42ae-92e5-0ed0bdc2eab1",
+        "name": "Aggregate FAZ.NET",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke.\n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: New York Times (NYT) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+          "needsFallback": true,
+          "messages": {
+            "messageValues": []
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.9,
+        "position": [
+          1056,
+          1552
+        ],
+        "id": "3ccf9094-5273-424a-a6e0-24f1d8cc845a",
+        "name": "Summarize NYT"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke.\n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: British Broadcast Corporation (BBC) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+          "needsFallback": true,
+          "messages": {
+            "messageValues": []
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.9,
+        "position": [
+          1056,
+          3056
+        ],
+        "id": "aac3d310-07a9-4059-9e0a-a32474d7dbf9",
+        "name": "Summarize BBC"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke.\n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: Washington Street Journal (WSJ) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+          "needsFallback": true,
+          "messages": {
+            "messageValues": []
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.9,
+        "position": [
+          1056,
+          2224
+        ],
+        "id": "98f92743-4f8f-4698-8899-2fda1770a44d",
+        "name": "Summarize WSJ"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          2480,
+          2560
+        ],
+        "id": "c2e7a34c-a2c9-4bba-b07f-5a2bafcd5988",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n\n{{ $json.data.map(item => item.text).join(\"\\n\\n---\\n\\n\") }}",
+          "needsFallback": true,
+          "messages": {
+            "messageValues": []
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.9,
+        "position": [
+          2720,
+          2560
+        ],
+        "id": "e04ac977-7d05-4828-bf5b-81f4cdf7424a",
+        "name": "Write Report"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: Frankfurter Allgemeine Zeitung (FAZ) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+          "needsFallback": true,
+          "messages": {
+            "messageValues": []
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.9,
+        "position": [
+          1072,
+          3712
+        ],
+        "id": "62609109-ad97-4948-b64a-5c5996b05ade",
+        "name": "Summarize FAZ"
+      },
+      {
+        "parameters": {
+          "model": "mistral-small-2603",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          1056,
+          1760
+        ],
+        "id": "1ba21cd8-b566-496e-bd9f-aff011f99015",
+        "name": "mistral-small-2603 (1)",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "w613RN8tRYhy269h",
+            "name": "Mistral API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "claude-haiku-4-5-20251001",
+            "mode": "list",
+            "cachedResultName": "Claude Haiku 4.5"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.5,
+        "position": [
+          1216,
+          1760
+        ],
+        "id": "5124ddc3-e3ff-4721-80ee-62ac5869de11",
+        "name": "Claude Haiku 4.5 (1)",
+        "credentials": {
+          "anthropicApi": {
+            "id": "0jqTAeHMP0aAlV8t",
+            "name": "Claude n8n-api"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": "mistral-small-2603",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          1056,
+          2384
+        ],
+        "id": "d969b2b7-a684-43b6-b4c3-55230e3edc44",
+        "name": "mistral-small-2603 (2)",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "w613RN8tRYhy269h",
+            "name": "Mistral API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "claude-haiku-4-5-20251001",
+            "mode": "list",
+            "cachedResultName": "Claude Haiku 4.5"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.5,
+        "position": [
+          1216,
+          2384
+        ],
+        "id": "cbcad09c-d9de-46e0-8ad5-90e446399063",
+        "name": "Claude Haiku 4.5 (2)",
+        "credentials": {
+          "anthropicApi": {
+            "id": "0jqTAeHMP0aAlV8t",
+            "name": "Claude n8n-api"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": "mistral-small-2603",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          1056,
+          3216
+        ],
+        "id": "daccd504-8907-4fe5-bcfc-d19add13aa60",
+        "name": "mistral-small-2603 (3)",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "w613RN8tRYhy269h",
+            "name": "Mistral API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "claude-haiku-4-5-20251001",
+            "mode": "list",
+            "cachedResultName": "Claude Haiku 4.5"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.5,
+        "position": [
+          1216,
+          3216
+        ],
+        "id": "c90521ac-5b86-4fee-b66e-472daf0b5629",
+        "name": "Claude Haiku 4.5 (3)",
+        "credentials": {
+          "anthropicApi": {
+            "id": "0jqTAeHMP0aAlV8t",
+            "name": "Claude n8n-api"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": "mistral-small-2603",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          1072,
+          3872
+        ],
+        "id": "49a3190a-d438-4d03-8ad3-0f7b636af040",
+        "name": "mistral-small-2603 (4)",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "w613RN8tRYhy269h",
+            "name": "Mistral API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "claude-haiku-4-5-20251001",
+            "mode": "list",
+            "cachedResultName": "Claude Haiku 4.5"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.5,
+        "position": [
+          1232,
+          3872
+        ],
+        "id": "aed4df40-1d9d-4b29-86f0-84e372627581",
+        "name": "Claude Haiku 4.5 (4)",
+        "credentials": {
+          "anthropicApi": {
+            "id": "0jqTAeHMP0aAlV8t",
+            "name": "Claude n8n-api"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": "mistral-small-2603",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          2720,
+          2720
+        ],
+        "id": "d9f694d5-3444-4e8e-8056-1fa15b70f422",
+        "name": "mistral-small-2603 (5)",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "w613RN8tRYhy269h",
+            "name": "Mistral API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "claude-haiku-4-5-20251001",
+            "mode": "list",
+            "cachedResultName": "Claude Haiku 4.5"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.5,
+        "position": [
+          2880,
+          2720
+        ],
+        "id": "e2c1c702-0481-4b50-9b0f-882e39aed9e3",
+        "name": "Claude Haiku 4.5 (5)",
+        "credentials": {
+          "anthropicApi": {
+            "id": "0jqTAeHMP0aAlV8t",
+            "name": "Claude n8n-api"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "RSS NYT World",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS NYT Americas",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS NYT Africa",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS NYT AsiaPacific",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS NYT Europe",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS NYT MiddleEast",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS WSJ World News",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS WSJ Politics",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS WSJ US",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS BBC Asia",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS BBC Europe",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS BBC Latin America",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS BBC Middle East",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS BBC US & Canada",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS BBC Politics",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS FAZ.NET USA",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS FAZ.NET Inland",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS FAZ.NET Ausland",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RSS NYT World": {
+        "main": [
+          [
+            {
+              "node": "Merge NYT",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "RSS NYT Africa": {
+        "main": [
+          [
+            {
+              "node": "Merge NYT",
+              "type": "main",
+              "index": 1
+            }
+          ],
+          []
+        ]
+      },
+      "Merge NYT": {
+        "main": [
+          [
+            {
+              "node": "Aggregate NYT",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RSS NYT Americas": {
+        "main": [
+          [
+            {
+              "node": "Merge NYT",
+              "type": "main",
+              "index": 2
+            }
+          ],
+          []
+        ]
+      },
+      "RSS NYT AsiaPacific": {
+        "main": [
+          [
+            {
+              "node": "Merge NYT",
+              "type": "main",
+              "index": 3
+            }
+          ],
+          []
+        ]
+      },
+      "RSS NYT Europe": {
+        "main": [
+          [
+            {
+              "node": "Merge NYT",
+              "type": "main",
+              "index": 4
+            }
+          ],
+          []
+        ]
+      },
+      "RSS NYT MiddleEast": {
+        "main": [
+          [
+            {
+              "node": "Merge NYT",
+              "type": "main",
+              "index": 5
+            }
+          ],
+          []
+        ]
+      },
+      "RSS WSJ World News": {
+        "main": [
+          [
+            {
+              "node": "Merge WSJ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RSS WSJ Politics": {
+        "main": [
+          [
+            {
+              "node": "Merge WSJ",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "RSS WSJ US": {
+        "main": [
+          [
+            {
+              "node": "Merge WSJ",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "RSS BBC Asia": {
+        "main": [
+          [
+            {
+              "node": "Merge BBC",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RSS BBC Europe": {
+        "main": [
+          [
+            {
+              "node": "Merge BBC",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "RSS BBC Latin America": {
+        "main": [
+          [
+            {
+              "node": "Merge BBC",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "RSS BBC Middle East": {
+        "main": [
+          [
+            {
+              "node": "Merge BBC",
+              "type": "main",
+              "index": 3
+            }
+          ]
+        ]
+      },
+      "RSS BBC US & Canada": {
+        "main": [
+          [
+            {
+              "node": "Merge BBC",
+              "type": "main",
+              "index": 4
+            }
+          ]
+        ]
+      },
+      "RSS BBC Politics": {
+        "main": [
+          [
+            {
+              "node": "Merge BBC",
+              "type": "main",
+              "index": 5
+            }
+          ]
+        ]
+      },
+      "Merge WSJ": {
+        "main": [
+          [
+            {
+              "node": "Aggregate WSJ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge BBC": {
+        "main": [
+          [
+            {
+              "node": "Aggregate BBC",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RSS FAZ.NET USA": {
+        "main": [
+          [
+            {
+              "node": "Merge FAZ.NET",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RSS FAZ.NET Inland": {
+        "main": [
+          [
+            {
+              "node": "Merge FAZ.NET",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "RSS FAZ.NET Ausland": {
+        "main": [
+          [
+            {
+              "node": "Merge FAZ.NET",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "Merge FAZ.NET": {
+        "main": [
+          [
+            {
+              "node": "Aggregate FAZ.NET",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate NYT": {
+        "main": [
+          [
+            {
+              "node": "Summarize NYT",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate WSJ": {
+        "main": [
+          [
+            {
+              "node": "Summarize WSJ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate BBC": {
+        "main": [
+          [
+            {
+              "node": "Summarize BBC",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate FAZ.NET": {
+        "main": [
+          [
+            {
+              "node": "Summarize FAZ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Summarize NYT": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Summarize BBC": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "Summarize WSJ": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Write Report",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Write Report": {
+        "main": [
+          [
+            {
+              "node": "Send Summary Susanne",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Send Summary Sören",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Summarize FAZ": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 3
+            }
+          ]
+        ]
+      },
+      "mistral-small-2603 (1)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize NYT",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude Haiku 4.5 (1)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize NYT",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "mistral-small-2603 (2)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize WSJ",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude Haiku 4.5 (2)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize WSJ",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "mistral-small-2603 (3)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize BBC",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude Haiku 4.5 (3)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize BBC",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "mistral-small-2603 (4)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize FAZ",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude Haiku 4.5 (4)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize FAZ",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "mistral-small-2603 (5)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Write Report",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude Haiku 4.5 (5)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Write Report",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "binaryMode": "separate",
+      "timeSavedMode": "fixed",
+      "saveDataErrorExecution": "none",
+      "callerPolicy": "workflowsFromSameOwner",
+      "executionTimeout": 180,
+      "availableInMCP": false,
+      "timeSavedPerExecution": 10,
+      "errorWorkflow": "hmJldT9kg1FuUJhz"
+    },
+    "staticData": {
+      "node:Schedule Trigger": {
+        "recurrenceRules": []
+      }
+    },
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "9526a1e2-9aca-4f45-bec2-198558b8f288",
+    "activeVersionId": "9526a1e2-9aca-4f45-bec2-198558b8f288",
+    "triggerCount": 1,
+    "shared": [
+      {
+        "updatedAt": "2026-05-21T20:54:21.994Z",
+        "createdAt": "2026-05-21T20:54:21.994Z",
+        "role": "workflow:owner",
+        "workflowId": "AKEWhsWFux9gSZBS",
+        "projectId": "vIaIDcGye5gviyqQ"
+      }
+    ],
+    "activeVersion": {
+      "updatedAt": "2026-05-24T10:41:01.000Z",
+      "createdAt": "2026-05-24T10:39:57.497Z",
+      "versionId": "9526a1e2-9aca-4f45-bec2-198558b8f288",
+      "workflowId": "AKEWhsWFux9gSZBS",
+      "nodes": [
+        {
+          "parameters": {
+            "rule": {
+              "interval": [
+                {
+                  "triggerAtHour": 8
+                },
+                {
+                  "triggerAtHour": 19
+                }
+              ]
+            }
+          },
+          "type": "n8n-nodes-base.scheduleTrigger",
+          "typeVersion": 1.3,
+          "position": [
+            -880,
+            2544
+          ],
+          "id": "728bb2db-91bc-49bf-9a72-98b88ea17047",
+          "name": "Schedule Trigger"
+        },
+        {
+          "parameters": {
+            "url": "https://rss.nytimes.com/services/xml/rss/nyt/World.xm",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            1184
+          ],
+          "id": "387ac258-bb3f-41c5-b1f5-e7446b39b0be",
+          "name": "RSS NYT World",
+          "alwaysOutputData": false,
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://rss.nytimes.com/services/xml/rss/nyt/Americas.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            1472
+          ],
+          "id": "ad826cb6-dd89-42bf-b5d6-d49fef1381d4",
+          "name": "RSS NYT Americas",
+          "alwaysOutputData": false,
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://rss.nytimes.com/services/xml/rss/nyt/Africa.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            1328
+          ],
+          "id": "4378cc4e-2c29-4bfd-a7fb-42d5575f2843",
+          "name": "RSS NYT Africa",
+          "alwaysOutputData": false,
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://rss.nytimes.com/services/xml/rss/nyt/AsiaPacific.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            1616
+          ],
+          "id": "df3b3b98-2391-4a2e-954a-22723eca5d38",
+          "name": "RSS NYT AsiaPacific",
+          "alwaysOutputData": false,
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://rss.nytimes.com/services/xml/rss/nyt/Europe.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            1776
+          ],
+          "id": "eb4ec3a0-912d-44dd-b3d8-02689a60c046",
+          "name": "RSS NYT Europe",
+          "alwaysOutputData": false,
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://rss.nytimes.com/services/xml/rss/nyt/MiddleEast.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            1920
+          ],
+          "id": "2b263d30-a111-4a18-a7fd-8a51d25b1a71",
+          "name": "RSS NYT MiddleEast",
+          "alwaysOutputData": false,
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "mode": "combineBySql",
+            "numberInputs": 6,
+            "query": "SELECT title, link, content, isoDate \nFROM input1 \nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input3\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input4\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input5\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input6\nWHERE title IS NOT NULL;",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.merge",
+          "typeVersion": 3.2,
+          "position": [
+            608,
+            1488
+          ],
+          "id": "d278902b-6e9b-4ee2-b78d-e984e059430e",
+          "name": "Merge NYT"
+        },
+        {
+          "parameters": {
+            "url": "https://feeds.content.dowjones.io/public/rss/RSSWorldNews",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            2080
+          ],
+          "id": "319b3cec-04fc-4e86-83b1-e77309b332bf",
+          "name": "RSS WSJ World News",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://feeds.content.dowjones.io/public/rss/socialpoliticsfeed",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            2224
+          ],
+          "id": "9e8c6d15-1676-447a-9547-889bcf2de1bd",
+          "name": "RSS WSJ Politics",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://feeds.content.dowjones.io/public/rss/RSSUSnews",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            2368
+          ],
+          "id": "ce251491-e7d5-4561-8fa4-d135813790e5",
+          "name": "RSS WSJ US",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://feeds.bbci.co.uk/news/world/asia/rss.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            2704
+          ],
+          "id": "1dff48a9-e1ed-4251-af18-102a30cf234b",
+          "name": "RSS BBC Asia",
+          "alwaysOutputData": false,
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://feeds.bbci.co.uk/news/world/europe/rss.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            2848
+          ],
+          "id": "985e8e61-647d-47d1-a72b-ca352d1122bd",
+          "name": "RSS BBC Europe",
+          "alwaysOutputData": false,
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://feeds.bbci.co.uk/news/world/latin_america/rss.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            2992
+          ],
+          "id": "710ea037-28d0-4fec-b52e-51176fbe0ba7",
+          "name": "RSS BBC Latin America",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            3136
+          ],
+          "id": "a70f126f-ebec-4d7f-a345-bdf57ebe3a97",
+          "name": "RSS BBC Middle East",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://feeds.bbci.co.uk/news/politics/rss.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            3424
+          ],
+          "id": "120de3b6-7b4a-4128-a99d-f3db60d3d4b1",
+          "name": "RSS BBC Politics",
+          "alwaysOutputData": false,
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            3280
+          ],
+          "id": "7d5feecb-a34d-46b7-a28f-d9879edfa460",
+          "name": "RSS BBC US & Canada",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "mode": "combineBySql",
+            "numberInputs": 6,
+            "query": "SELECT title, link, content, isoDate\nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input3\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input4\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input5\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input6\nWHERE title IS NOT NULL;",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.merge",
+          "typeVersion": 3.2,
+          "position": [
+            624,
+            2992
+          ],
+          "id": "f04b6fc2-3030-4598-8d82-3086fa6cba49",
+          "name": "Merge BBC",
+          "alwaysOutputData": false
+        },
+        {
+          "parameters": {
+            "mode": "combineBySql",
+            "numberInputs": 3,
+            "query": "SELECT title, link, content, isoDate \nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate\nFROM input3\nWHERE title IS NOT NULL;",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.merge",
+          "typeVersion": 3.2,
+          "position": [
+            624,
+            2208
+          ],
+          "id": "754def1b-2182-4c39-a5a8-83f82b88ab5a",
+          "name": "Merge WSJ"
+        },
+        {
+          "parameters": {
+            "url": "https://www.faz.net/rss/aktuell/politik/usa-unter-trump/",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            3568
+          ],
+          "id": "cea17dc1-4440-40e7-affb-1dbd300f4ebf",
+          "name": "RSS FAZ.NET USA",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://www.faz.net/rss/aktuell/politik/inland/",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            3712
+          ],
+          "id": "5a994f46-ccbd-46ac-8e9c-7b2621897c77",
+          "name": "RSS FAZ.NET Inland",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://www.faz.net/rss/aktuell/politik/ausland/",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            208,
+            3856
+          ],
+          "id": "f08f2143-5cc3-46e6-885f-728b9c56ad9b",
+          "name": "RSS FAZ.NET Ausland",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "mode": "combineBySql",
+            "numberInputs": 3,
+            "query": "SELECT title, link, content, isoDate\nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input3\nWHERE title IS NOT NULL;",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.merge",
+          "typeVersion": 3.2,
+          "position": [
+            624,
+            3696
+          ],
+          "id": "7998be98-813f-4234-a509-343fb00c90ea",
+          "name": "Merge FAZ.NET"
+        },
+        {
+          "parameters": {
+            "chatId": "8325665200",
+            "text": "=Hier eine kleine Zusammenfassung von aktuellen Nachrichten:\n{{ $json.text }}",
+            "additionalFields": {}
+          },
+          "type": "n8n-nodes-base.telegram",
+          "typeVersion": 1.2,
+          "position": [
+            3152,
+            2448
+          ],
+          "id": "225babdb-f450-40f1-95b0-a1a775488364",
+          "name": "Send Summary Sören",
+          "webhookId": "241de077-0551-4e96-a0c6-397105bf2588",
+          "retryOnFail": true,
+          "credentials": {
+            "telegramApi": {
+              "id": "wjoVTprWbyLg2GzG",
+              "name": "kevin_geonews_bot"
+            }
+          },
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "chatId": "8887726838",
+            "text": "=Hier eine kleine Zusammenfassung von aktuellen Nachrichten:\n{{ $json.text }}",
+            "additionalFields": {}
+          },
+          "type": "n8n-nodes-base.telegram",
+          "typeVersion": 1.2,
+          "position": [
+            3152,
+            2656
+          ],
+          "id": "713c1228-22bb-4e7d-a636-b326c2fe6a0b",
+          "name": "Send Summary Susanne",
+          "webhookId": "241de077-0551-4e96-a0c6-397105bf2588",
+          "retryOnFail": true,
+          "credentials": {
+            "telegramApi": {
+              "id": "wjoVTprWbyLg2GzG",
+              "name": "kevin_geonews_bot"
+            }
+          },
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "numberInputs": 4
+          },
+          "type": "n8n-nodes-base.merge",
+          "typeVersion": 3.2,
+          "position": [
+            2272,
+            2528
+          ],
+          "id": "9147de0f-62c7-4df1-81b1-bd81478216bb",
+          "name": "Merge"
+        },
+        {
+          "parameters": {
+            "aggregate": "aggregateAllItemData",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.aggregate",
+          "typeVersion": 1,
+          "position": [
+            816,
+            1552
+          ],
+          "id": "a8af5cb2-e069-4a23-b651-a0980170de8f",
+          "name": "Aggregate NYT",
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "aggregate": "aggregateAllItemData",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.aggregate",
+          "typeVersion": 1,
+          "position": [
+            848,
+            2224
+          ],
+          "id": "1642a25e-4e5c-44a8-a7fc-1ea842c0be52",
+          "name": "Aggregate WSJ",
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "aggregate": "aggregateAllItemData",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.aggregate",
+          "typeVersion": 1,
+          "position": [
+            848,
+            3056
+          ],
+          "id": "c946197d-49d0-40a7-9123-d4c8fb77b72a",
+          "name": "Aggregate BBC",
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "aggregate": "aggregateAllItemData",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.aggregate",
+          "typeVersion": 1,
+          "position": [
+            864,
+            3712
+          ],
+          "id": "6a4dea4d-4954-42ae-92e5-0ed0bdc2eab1",
+          "name": "Aggregate FAZ.NET",
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "promptType": "define",
+            "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke.\n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: New York Times (NYT) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+            "needsFallback": true,
+            "messages": {
+              "messageValues": []
+            },
+            "batching": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.chainLlm",
+          "typeVersion": 1.9,
+          "position": [
+            1056,
+            1552
+          ],
+          "id": "3ccf9094-5273-424a-a6e0-24f1d8cc845a",
+          "name": "Summarize NYT"
+        },
+        {
+          "parameters": {
+            "promptType": "define",
+            "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke.\n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: British Broadcast Corporation (BBC) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+            "needsFallback": true,
+            "messages": {
+              "messageValues": []
+            },
+            "batching": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.chainLlm",
+          "typeVersion": 1.9,
+          "position": [
+            1056,
+            3056
+          ],
+          "id": "aac3d310-07a9-4059-9e0a-a32474d7dbf9",
+          "name": "Summarize BBC"
+        },
+        {
+          "parameters": {
+            "promptType": "define",
+            "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke.\n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: Washington Street Journal (WSJ) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+            "needsFallback": true,
+            "messages": {
+              "messageValues": []
+            },
+            "batching": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.chainLlm",
+          "typeVersion": 1.9,
+          "position": [
+            1056,
+            2224
+          ],
+          "id": "98f92743-4f8f-4698-8899-2fda1770a44d",
+          "name": "Summarize WSJ"
+        },
+        {
+          "parameters": {
+            "aggregate": "aggregateAllItemData",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.aggregate",
+          "typeVersion": 1,
+          "position": [
+            2480,
+            2560
+          ],
+          "id": "c2e7a34c-a2c9-4bba-b07f-5a2bafcd5988",
+          "name": "Aggregate"
+        },
+        {
+          "parameters": {
+            "promptType": "define",
+            "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n\n{{ $json.data.map(item => item.text).join(\"\\n\\n---\\n\\n\") }}",
+            "needsFallback": true,
+            "messages": {
+              "messageValues": []
+            },
+            "batching": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.chainLlm",
+          "typeVersion": 1.9,
+          "position": [
+            2720,
+            2560
+          ],
+          "id": "e04ac977-7d05-4828-bf5b-81f4cdf7424a",
+          "name": "Write Report"
+        },
+        {
+          "parameters": {
+            "promptType": "define",
+            "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: Frankfurter Allgemeine Zeitung (FAZ) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+            "needsFallback": true,
+            "messages": {
+              "messageValues": []
+            },
+            "batching": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.chainLlm",
+          "typeVersion": 1.9,
+          "position": [
+            1072,
+            3712
+          ],
+          "id": "62609109-ad97-4948-b64a-5c5996b05ade",
+          "name": "Summarize FAZ"
+        },
+        {
+          "parameters": {
+            "model": "mistral-small-2603",
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+          "typeVersion": 1,
+          "position": [
+            1056,
+            1760
+          ],
+          "id": "1ba21cd8-b566-496e-bd9f-aff011f99015",
+          "name": "mistral-small-2603 (1)",
+          "credentials": {
+            "mistralCloudApi": {
+              "id": "w613RN8tRYhy269h",
+              "name": "Mistral API"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": {
+              "__rl": true,
+              "value": "claude-haiku-4-5-20251001",
+              "mode": "list",
+              "cachedResultName": "Claude Haiku 4.5"
+            },
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+          "typeVersion": 1.5,
+          "position": [
+            1216,
+            1760
+          ],
+          "id": "5124ddc3-e3ff-4721-80ee-62ac5869de11",
+          "name": "Claude Haiku 4.5 (1)",
+          "credentials": {
+            "anthropicApi": {
+              "id": "0jqTAeHMP0aAlV8t",
+              "name": "Claude n8n-api"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": "mistral-small-2603",
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+          "typeVersion": 1,
+          "position": [
+            1056,
+            2384
+          ],
+          "id": "d969b2b7-a684-43b6-b4c3-55230e3edc44",
+          "name": "mistral-small-2603 (2)",
+          "credentials": {
+            "mistralCloudApi": {
+              "id": "w613RN8tRYhy269h",
+              "name": "Mistral API"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": {
+              "__rl": true,
+              "value": "claude-haiku-4-5-20251001",
+              "mode": "list",
+              "cachedResultName": "Claude Haiku 4.5"
+            },
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+          "typeVersion": 1.5,
+          "position": [
+            1216,
+            2384
+          ],
+          "id": "cbcad09c-d9de-46e0-8ad5-90e446399063",
+          "name": "Claude Haiku 4.5 (2)",
+          "credentials": {
+            "anthropicApi": {
+              "id": "0jqTAeHMP0aAlV8t",
+              "name": "Claude n8n-api"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": "mistral-small-2603",
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+          "typeVersion": 1,
+          "position": [
+            1056,
+            3216
+          ],
+          "id": "daccd504-8907-4fe5-bcfc-d19add13aa60",
+          "name": "mistral-small-2603 (3)",
+          "credentials": {
+            "mistralCloudApi": {
+              "id": "w613RN8tRYhy269h",
+              "name": "Mistral API"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": {
+              "__rl": true,
+              "value": "claude-haiku-4-5-20251001",
+              "mode": "list",
+              "cachedResultName": "Claude Haiku 4.5"
+            },
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+          "typeVersion": 1.5,
+          "position": [
+            1216,
+            3216
+          ],
+          "id": "c90521ac-5b86-4fee-b66e-472daf0b5629",
+          "name": "Claude Haiku 4.5 (3)",
+          "credentials": {
+            "anthropicApi": {
+              "id": "0jqTAeHMP0aAlV8t",
+              "name": "Claude n8n-api"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": "mistral-small-2603",
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+          "typeVersion": 1,
+          "position": [
+            1072,
+            3872
+          ],
+          "id": "49a3190a-d438-4d03-8ad3-0f7b636af040",
+          "name": "mistral-small-2603 (4)",
+          "credentials": {
+            "mistralCloudApi": {
+              "id": "w613RN8tRYhy269h",
+              "name": "Mistral API"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": {
+              "__rl": true,
+              "value": "claude-haiku-4-5-20251001",
+              "mode": "list",
+              "cachedResultName": "Claude Haiku 4.5"
+            },
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+          "typeVersion": 1.5,
+          "position": [
+            1232,
+            3872
+          ],
+          "id": "aed4df40-1d9d-4b29-86f0-84e372627581",
+          "name": "Claude Haiku 4.5 (4)",
+          "credentials": {
+            "anthropicApi": {
+              "id": "0jqTAeHMP0aAlV8t",
+              "name": "Claude n8n-api"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": "mistral-small-2603",
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+          "typeVersion": 1,
+          "position": [
+            2720,
+            2720
+          ],
+          "id": "d9f694d5-3444-4e8e-8056-1fa15b70f422",
+          "name": "mistral-small-2603 (5)",
+          "credentials": {
+            "mistralCloudApi": {
+              "id": "w613RN8tRYhy269h",
+              "name": "Mistral API"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": {
+              "__rl": true,
+              "value": "claude-haiku-4-5-20251001",
+              "mode": "list",
+              "cachedResultName": "Claude Haiku 4.5"
+            },
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+          "typeVersion": 1.5,
+          "position": [
+            2880,
+            2720
+          ],
+          "id": "e2c1c702-0481-4b50-9b0f-882e39aed9e3",
+          "name": "Claude Haiku 4.5 (5)",
+          "credentials": {
+            "anthropicApi": {
+              "id": "0jqTAeHMP0aAlV8t",
+              "name": "Claude n8n-api"
+            }
+          }
+        }
+      ],
+      "connections": {
+        "Schedule Trigger": {
+          "main": [
+            [
+              {
+                "node": "RSS NYT World",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS NYT Americas",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS NYT Africa",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS NYT AsiaPacific",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS NYT Europe",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS NYT MiddleEast",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS WSJ World News",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS WSJ Politics",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS WSJ US",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS BBC Asia",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS BBC Europe",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS BBC Latin America",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS BBC Middle East",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS BBC US & Canada",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS BBC Politics",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS FAZ.NET USA",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS FAZ.NET Inland",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS FAZ.NET Ausland",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "RSS NYT World": {
+          "main": [
+            [
+              {
+                "node": "Merge NYT",
+                "type": "main",
+                "index": 0
+              }
+            ],
+            []
+          ]
+        },
+        "RSS NYT Africa": {
+          "main": [
+            [
+              {
+                "node": "Merge NYT",
+                "type": "main",
+                "index": 1
+              }
+            ],
+            []
+          ]
+        },
+        "Merge NYT": {
+          "main": [
+            [
+              {
+                "node": "Aggregate NYT",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "RSS NYT Americas": {
+          "main": [
+            [
+              {
+                "node": "Merge NYT",
+                "type": "main",
+                "index": 2
+              }
+            ],
+            []
+          ]
+        },
+        "RSS NYT AsiaPacific": {
+          "main": [
+            [
+              {
+                "node": "Merge NYT",
+                "type": "main",
+                "index": 3
+              }
+            ],
+            []
+          ]
+        },
+        "RSS NYT Europe": {
+          "main": [
+            [
+              {
+                "node": "Merge NYT",
+                "type": "main",
+                "index": 4
+              }
+            ],
+            []
+          ]
+        },
+        "RSS NYT MiddleEast": {
+          "main": [
+            [
+              {
+                "node": "Merge NYT",
+                "type": "main",
+                "index": 5
+              }
+            ],
+            []
+          ]
+        },
+        "RSS WSJ World News": {
+          "main": [
+            [
+              {
+                "node": "Merge WSJ",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "RSS WSJ Politics": {
+          "main": [
+            [
+              {
+                "node": "Merge WSJ",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "RSS WSJ US": {
+          "main": [
+            [
+              {
+                "node": "Merge WSJ",
+                "type": "main",
+                "index": 2
+              }
+            ]
+          ]
+        },
+        "RSS BBC Asia": {
+          "main": [
+            [
+              {
+                "node": "Merge BBC",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "RSS BBC Europe": {
+          "main": [
+            [
+              {
+                "node": "Merge BBC",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "RSS BBC Latin America": {
+          "main": [
+            [
+              {
+                "node": "Merge BBC",
+                "type": "main",
+                "index": 2
+              }
+            ]
+          ]
+        },
+        "RSS BBC Middle East": {
+          "main": [
+            [
+              {
+                "node": "Merge BBC",
+                "type": "main",
+                "index": 3
+              }
+            ]
+          ]
+        },
+        "RSS BBC US & Canada": {
+          "main": [
+            [
+              {
+                "node": "Merge BBC",
+                "type": "main",
+                "index": 4
+              }
+            ]
+          ]
+        },
+        "RSS BBC Politics": {
+          "main": [
+            [
+              {
+                "node": "Merge BBC",
+                "type": "main",
+                "index": 5
+              }
+            ]
+          ]
+        },
+        "Merge WSJ": {
+          "main": [
+            [
+              {
+                "node": "Aggregate WSJ",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Merge BBC": {
+          "main": [
+            [
+              {
+                "node": "Aggregate BBC",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "RSS FAZ.NET USA": {
+          "main": [
+            [
+              {
+                "node": "Merge FAZ.NET",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "RSS FAZ.NET Inland": {
+          "main": [
+            [
+              {
+                "node": "Merge FAZ.NET",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "RSS FAZ.NET Ausland": {
+          "main": [
+            [
+              {
+                "node": "Merge FAZ.NET",
+                "type": "main",
+                "index": 2
+              }
+            ]
+          ]
+        },
+        "Merge FAZ.NET": {
+          "main": [
+            [
+              {
+                "node": "Aggregate FAZ.NET",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Merge": {
+          "main": [
+            [
+              {
+                "node": "Aggregate",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Aggregate NYT": {
+          "main": [
+            [
+              {
+                "node": "Summarize NYT",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Aggregate WSJ": {
+          "main": [
+            [
+              {
+                "node": "Summarize WSJ",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Aggregate BBC": {
+          "main": [
+            [
+              {
+                "node": "Summarize BBC",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Aggregate FAZ.NET": {
+          "main": [
+            [
+              {
+                "node": "Summarize FAZ",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Summarize NYT": {
+          "main": [
+            [
+              {
+                "node": "Merge",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Summarize BBC": {
+          "main": [
+            [
+              {
+                "node": "Merge",
+                "type": "main",
+                "index": 2
+              }
+            ]
+          ]
+        },
+        "Summarize WSJ": {
+          "main": [
+            [
+              {
+                "node": "Merge",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "Aggregate": {
+          "main": [
+            [
+              {
+                "node": "Write Report",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Write Report": {
+          "main": [
+            [
+              {
+                "node": "Send Summary Susanne",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Send Summary Sören",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Summarize FAZ": {
+          "main": [
+            [
+              {
+                "node": "Merge",
+                "type": "main",
+                "index": 3
+              }
+            ]
+          ]
+        },
+        "mistral-small-2603 (1)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize NYT",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Claude Haiku 4.5 (1)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize NYT",
+                "type": "ai_languageModel",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "mistral-small-2603 (2)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize WSJ",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Claude Haiku 4.5 (2)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize WSJ",
+                "type": "ai_languageModel",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "mistral-small-2603 (3)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize BBC",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Claude Haiku 4.5 (3)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize BBC",
+                "type": "ai_languageModel",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "mistral-small-2603 (4)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize FAZ",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Claude Haiku 4.5 (4)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize FAZ",
+                "type": "ai_languageModel",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "mistral-small-2603 (5)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Write Report",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Claude Haiku 4.5 (5)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Write Report",
+                "type": "ai_languageModel",
+                "index": 1
+              }
+            ]
+          ]
+        }
+      },
+      "authors": "Sören Panten",
+      "name": "v1.1",
+      "description": "Updated prompts to account for current news (<12h) and use the other as background for better reasoning",
+      "autosaved": true
+    },
+    "tags": []
+  }
+]
