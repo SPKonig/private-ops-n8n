@@ -1,0 +1,1925 @@
+[
+  {
+    "updatedAt": "2026-05-24T10:53:48.927Z",
+    "createdAt": "2026-05-22T14:49:53.024Z",
+    "id": "5ILVTTV5hXbftLcX",
+    "name": "1-daily-german-news-report",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 8
+              },
+              {
+                "triggerAtHour": 19
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -1056,
+          2512
+        ],
+        "id": "e99e19c3-4fff-4ab4-8020-6cd2da21d836",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "url": "https://www.faz.net/rss/aktuell/politik/usa-unter-trump/",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          -832,
+          2416
+        ],
+        "id": "79fb09e7-f362-4c70-884e-ae8a6b5af875",
+        "name": "RSS FAZ.NET USA",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://www.faz.net/rss/aktuell/politik/inland/",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          -832,
+          2608
+        ],
+        "id": "223525b8-30e3-42bd-9547-1d3d0b0a365e",
+        "name": "RSS FAZ.NET Inland",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://www.faz.net/rss/aktuell/politik/ausland/",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          -832,
+          2808
+        ],
+        "id": "0272f3ff-ef52-4fe6-be02-d79ab4b9c32d",
+        "name": "RSS FAZ.NET Ausland",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "mode": "combineBySql",
+          "numberInputs": 3,
+          "query": "SELECT title, link, content, isoDate\nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input3\nWHERE title IS NOT NULL;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -608,
+          2600
+        ],
+        "id": "d55b4be2-c925-4bac-b700-8509d1287f6b",
+        "name": "Merge FAZ.NET"
+      },
+      {
+        "parameters": {
+          "chatId": "8325665200",
+          "text": "=Hier eine kleine Zusammenfassung von aktuellen Nachrichten:\n{{ $json.text }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          992,
+          2520
+        ],
+        "id": "caa3f0b6-4f86-487f-875c-1c29788c7546",
+        "name": "Send Summary Sören",
+        "webhookId": "a1b19dd3-f28d-48a2-9cc1-b51db7b122f8",
+        "retryOnFail": true,
+        "credentials": {
+          "telegramApi": {
+            "id": "wjoVTprWbyLg2GzG",
+            "name": "kevin_geonews_bot"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "chatId": "8887726838",
+          "text": "=Hier eine kleine Zusammenfassung von aktuellen Nachrichten:\n{{ $json.text }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.telegram",
+        "typeVersion": 1.2,
+        "position": [
+          992,
+          2712
+        ],
+        "id": "c836787c-8714-435d-93fd-f65c400ebb44",
+        "name": "Send Summary Susanne",
+        "webhookId": "6af125b2-d6e6-4e47-ad3a-0b10573fe075",
+        "retryOnFail": true,
+        "credentials": {
+          "telegramApi": {
+            "id": "wjoVTprWbyLg2GzG",
+            "name": "kevin_geonews_bot"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "numberInputs": 3
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          192,
+          2600
+        ],
+        "id": "8ac732ea-3a09-4228-9caa-9a2c69609264",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          -384,
+          2616
+        ],
+        "id": "f6df00c8-b3c4-48d9-99ee-6ac93be7fc7a",
+        "name": "Aggregate FAZ.NET",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          416,
+          2616
+        ],
+        "id": "0c42de3c-adae-4e8b-8271-02b2fd38def5",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n\n{{ $json.data.map(item => item.text).join(\"\\n\\n---\\n\\n\") }}",
+          "needsFallback": true,
+          "messages": {
+            "messageValues": []
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.9,
+        "position": [
+          640,
+          2616
+        ],
+        "id": "1619ebd9-8a19-4fe7-b5a1-6604082e97fd",
+        "name": "Write Report"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: Frankfurter Allgemeine Zeitung (FAZ) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+          "needsFallback": true,
+          "messages": {
+            "messageValues": []
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.9,
+        "position": [
+          -160,
+          2512
+        ],
+        "id": "4073e791-1794-4b92-a842-cad1672235f2",
+        "name": "Summarize FAZ"
+      },
+      {
+        "parameters": {
+          "url": "https://www.tagesschau.de/inland/index~rss2.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          -832,
+          2224
+        ],
+        "id": "057f6bf1-4822-45e4-821a-847e3460433b",
+        "name": "RSS Tagesschau Inland",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://www.tagesschau.de/wirtschaft/index~rss2.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          -832,
+          2032
+        ],
+        "id": "88506d04-c782-4e85-9ab6-72f66eb3b0e1",
+        "name": "RSS Tagesschau Wirtschaft",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://www.tagesschau.de/ausland/index~rss2.xml",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          -832,
+          1840
+        ],
+        "id": "ebe78668-d11e-42e3-98da-8a0c1c098d09",
+        "name": "RSS Tagesschau Ausland",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "mode": "combineBySql",
+          "numberInputs": 3,
+          "query": "SELECT title, link, content, isoDate\nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input3\nWHERE title IS NOT NULL;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -608,
+          2024
+        ],
+        "id": "70fddcf0-a35d-4979-958e-d1c41d52f69e",
+        "name": "Merge Tagesschau"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          -384,
+          2040
+        ],
+        "id": "147da2b6-ea38-4788-87f4-e084a7d0497f",
+        "name": "Aggregate Tagesschau",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: Frankfurter Allgemeine Zeitung (FAZ) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+          "needsFallback": true,
+          "messages": {
+            "messageValues": []
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.9,
+        "position": [
+          -160,
+          2040
+        ],
+        "id": "e371848f-949a-4233-926c-cf2d49277fed",
+        "name": "Summarize Tagesschau"
+      },
+      {
+        "parameters": {
+          "model": "mistral-small-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          -152,
+          2264
+        ],
+        "id": "23bf559c-450f-430f-83e1-5fddda71716b",
+        "name": "mistral-small-latest (1)",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "w613RN8tRYhy269h",
+            "name": "Mistral API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "claude-haiku-4-5-20251001",
+            "mode": "list",
+            "cachedResultName": "Claude Haiku 4.5"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.5,
+        "position": [
+          -24,
+          2264
+        ],
+        "id": "f32db991-a466-499e-bd39-2e7af3a6cdfd",
+        "name": "Claude Haiku 4.5 (1)",
+        "credentials": {
+          "anthropicApi": {
+            "id": "0jqTAeHMP0aAlV8t",
+            "name": "Claude n8n-api"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": "mistral-small-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          -152,
+          2736
+        ],
+        "id": "09ff8b1a-30f4-49c9-aa32-a95ab41950b3",
+        "name": "mistral-small-latest (2)",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "w613RN8tRYhy269h",
+            "name": "Mistral API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "claude-haiku-4-5-20251001",
+            "mode": "list",
+            "cachedResultName": "Claude Haiku 4.5"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.5,
+        "position": [
+          -24,
+          2736
+        ],
+        "id": "abb70375-6f3a-4bc3-bbb5-04b0b929fdf9",
+        "name": "Claude Haiku 4.5 (2)",
+        "credentials": {
+          "anthropicApi": {
+            "id": "0jqTAeHMP0aAlV8t",
+            "name": "Claude n8n-api"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": "mistral-small-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          648,
+          2840
+        ],
+        "id": "1e1b5e77-b083-49a3-9459-56c29a42f9c1",
+        "name": "mistral-small-latest (4)",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "w613RN8tRYhy269h",
+            "name": "Mistral API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "claude-haiku-4-5-20251001",
+            "mode": "list",
+            "cachedResultName": "Claude Haiku 4.5"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.5,
+        "position": [
+          776,
+          2840
+        ],
+        "id": "e7641fe8-125c-48f0-9dd2-303aa5c0fa67",
+        "name": "Claude Haiku 4.5 (4)",
+        "credentials": {
+          "anthropicApi": {
+            "id": "0jqTAeHMP0aAlV8t",
+            "name": "Claude n8n-api"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: Frankfurter Allgemeine Zeitung (FAZ) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+          "needsFallback": true,
+          "messages": {
+            "messageValues": []
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.9,
+        "position": [
+          -160,
+          3104
+        ],
+        "id": "3adf25ae-9801-41a0-8849-ed8a40177383",
+        "name": "Summarize ZDF"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          -384,
+          3104
+        ],
+        "id": "a12516d9-31e2-4820-9aaf-b5c20b68d154",
+        "name": "Aggregate ZDF",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "mode": "combineBySql",
+          "query": "SELECT title, link, content, isoDate\nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -608,
+          3104
+        ],
+        "id": "1da05471-49f2-480f-85f3-449c65cfcf27",
+        "name": "Merge ZDF"
+      },
+      {
+        "parameters": {
+          "model": "mistral-small-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+        "typeVersion": 1,
+        "position": [
+          -152,
+          3328
+        ],
+        "id": "4ccffa02-27c8-4ddf-9760-7a21998e8f7c",
+        "name": "mistral-small-latest (3)",
+        "credentials": {
+          "mistralCloudApi": {
+            "id": "w613RN8tRYhy269h",
+            "name": "Mistral API"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "value": "claude-haiku-4-5-20251001",
+            "mode": "list",
+            "cachedResultName": "Claude Haiku 4.5"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+        "typeVersion": 1.5,
+        "position": [
+          -24,
+          3328
+        ],
+        "id": "3e8943c4-4913-46f5-b76f-b8b23b25d58f",
+        "name": "Claude Haiku 4.5 (3)",
+        "credentials": {
+          "anthropicApi": {
+            "id": "0jqTAeHMP0aAlV8t",
+            "name": "Claude n8n-api"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "url": "https://www.zdf.de/rss/zdf/politik",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          -832,
+          3000
+        ],
+        "id": "c1a61def-11d2-4530-8b47-55edb7da0852",
+        "name": "RSS ZDF Politik",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      },
+      {
+        "parameters": {
+          "url": "https://www.zdf.de/rss/zdf/nachrichten",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.rssFeedRead",
+        "typeVersion": 1.2,
+        "position": [
+          -832,
+          3200
+        ],
+        "id": "4c465190-5346-4f62-8970-651466663739",
+        "name": "RSS ZDF Nachrichten",
+        "onError": "continueRegularOutput",
+        "notes": "Error handling and cleaning of wrong data happens in the merge node"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "RSS FAZ.NET USA",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS FAZ.NET Inland",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS FAZ.NET Ausland",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS Tagesschau Inland",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS Tagesschau Wirtschaft",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS Tagesschau Ausland",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS ZDF Politik",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "RSS ZDF Nachrichten",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RSS FAZ.NET USA": {
+        "main": [
+          [
+            {
+              "node": "Merge FAZ.NET",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RSS FAZ.NET Inland": {
+        "main": [
+          [
+            {
+              "node": "Merge FAZ.NET",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "RSS FAZ.NET Ausland": {
+        "main": [
+          [
+            {
+              "node": "Merge FAZ.NET",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "Merge FAZ.NET": {
+        "main": [
+          [
+            {
+              "node": "Aggregate FAZ.NET",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate FAZ.NET": {
+        "main": [
+          [
+            {
+              "node": "Summarize FAZ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Write Report",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Write Report": {
+        "main": [
+          [
+            {
+              "node": "Send Summary Sören",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Send Summary Susanne",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Summarize FAZ": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "RSS Tagesschau Inland": {
+        "main": [
+          [
+            {
+              "node": "Merge Tagesschau",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "RSS Tagesschau Wirtschaft": {
+        "main": [
+          [
+            {
+              "node": "Merge Tagesschau",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "RSS Tagesschau Ausland": {
+        "main": [
+          [
+            {
+              "node": "Merge Tagesschau",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge Tagesschau": {
+        "main": [
+          [
+            {
+              "node": "Aggregate Tagesschau",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate Tagesschau": {
+        "main": [
+          [
+            {
+              "node": "Summarize Tagesschau",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "mistral-small-latest (1)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize Tagesschau",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude Haiku 4.5 (1)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize Tagesschau",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "mistral-small-latest (2)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize FAZ",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude Haiku 4.5 (2)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize FAZ",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Summarize Tagesschau": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "mistral-small-latest (4)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Write Report",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude Haiku 4.5 (4)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Write Report",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Summarize ZDF": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 2
+            }
+          ]
+        ]
+      },
+      "Aggregate ZDF": {
+        "main": [
+          [
+            {
+              "node": "Summarize ZDF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge ZDF": {
+        "main": [
+          [
+            {
+              "node": "Aggregate ZDF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "mistral-small-latest (3)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize ZDF",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Claude Haiku 4.5 (3)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Summarize ZDF",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "RSS ZDF Politik": {
+        "main": [
+          [
+            {
+              "node": "Merge ZDF",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "RSS ZDF Nachrichten": {
+        "main": [
+          [
+            {
+              "node": "Merge ZDF",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "binaryMode": "separate",
+      "timeSavedMode": "fixed",
+      "saveDataErrorExecution": "none",
+      "callerPolicy": "workflowsFromSameOwner",
+      "executionTimeout": 180,
+      "availableInMCP": false,
+      "timeSavedPerExecution": 10,
+      "errorWorkflow": "hmJldT9kg1FuUJhz"
+    },
+    "staticData": {
+      "node:Schedule Trigger": {
+        "recurrenceRules": []
+      }
+    },
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "f7bf6cda-11e7-44fb-9174-2d3c6df59f76",
+    "activeVersionId": "f7bf6cda-11e7-44fb-9174-2d3c6df59f76",
+    "triggerCount": 1,
+    "shared": [
+      {
+        "updatedAt": "2026-05-22T14:49:53.026Z",
+        "createdAt": "2026-05-22T14:49:53.026Z",
+        "role": "workflow:owner",
+        "workflowId": "5ILVTTV5hXbftLcX",
+        "projectId": "vIaIDcGye5gviyqQ"
+      }
+    ],
+    "activeVersion": {
+      "updatedAt": "2026-05-24T10:53:55.000Z",
+      "createdAt": "2026-05-24T10:53:48.928Z",
+      "versionId": "f7bf6cda-11e7-44fb-9174-2d3c6df59f76",
+      "workflowId": "5ILVTTV5hXbftLcX",
+      "nodes": [
+        {
+          "parameters": {
+            "rule": {
+              "interval": [
+                {
+                  "triggerAtHour": 8
+                },
+                {
+                  "triggerAtHour": 19
+                }
+              ]
+            }
+          },
+          "type": "n8n-nodes-base.scheduleTrigger",
+          "typeVersion": 1.3,
+          "position": [
+            -1056,
+            2512
+          ],
+          "id": "e99e19c3-4fff-4ab4-8020-6cd2da21d836",
+          "name": "Schedule Trigger"
+        },
+        {
+          "parameters": {
+            "url": "https://www.faz.net/rss/aktuell/politik/usa-unter-trump/",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            -832,
+            2416
+          ],
+          "id": "79fb09e7-f362-4c70-884e-ae8a6b5af875",
+          "name": "RSS FAZ.NET USA",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://www.faz.net/rss/aktuell/politik/inland/",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            -832,
+            2608
+          ],
+          "id": "223525b8-30e3-42bd-9547-1d3d0b0a365e",
+          "name": "RSS FAZ.NET Inland",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://www.faz.net/rss/aktuell/politik/ausland/",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            -832,
+            2808
+          ],
+          "id": "0272f3ff-ef52-4fe6-be02-d79ab4b9c32d",
+          "name": "RSS FAZ.NET Ausland",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "mode": "combineBySql",
+            "numberInputs": 3,
+            "query": "SELECT title, link, content, isoDate\nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input3\nWHERE title IS NOT NULL;",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.merge",
+          "typeVersion": 3.2,
+          "position": [
+            -608,
+            2600
+          ],
+          "id": "d55b4be2-c925-4bac-b700-8509d1287f6b",
+          "name": "Merge FAZ.NET"
+        },
+        {
+          "parameters": {
+            "chatId": "8325665200",
+            "text": "=Hier eine kleine Zusammenfassung von aktuellen Nachrichten:\n{{ $json.text }}",
+            "additionalFields": {}
+          },
+          "type": "n8n-nodes-base.telegram",
+          "typeVersion": 1.2,
+          "position": [
+            992,
+            2520
+          ],
+          "id": "caa3f0b6-4f86-487f-875c-1c29788c7546",
+          "name": "Send Summary Sören",
+          "webhookId": "a1b19dd3-f28d-48a2-9cc1-b51db7b122f8",
+          "retryOnFail": true,
+          "credentials": {
+            "telegramApi": {
+              "id": "wjoVTprWbyLg2GzG",
+              "name": "kevin_geonews_bot"
+            }
+          },
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "chatId": "8887726838",
+            "text": "=Hier eine kleine Zusammenfassung von aktuellen Nachrichten:\n{{ $json.text }}",
+            "additionalFields": {}
+          },
+          "type": "n8n-nodes-base.telegram",
+          "typeVersion": 1.2,
+          "position": [
+            992,
+            2712
+          ],
+          "id": "c836787c-8714-435d-93fd-f65c400ebb44",
+          "name": "Send Summary Susanne",
+          "webhookId": "6af125b2-d6e6-4e47-ad3a-0b10573fe075",
+          "retryOnFail": true,
+          "credentials": {
+            "telegramApi": {
+              "id": "wjoVTprWbyLg2GzG",
+              "name": "kevin_geonews_bot"
+            }
+          },
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "numberInputs": 3
+          },
+          "type": "n8n-nodes-base.merge",
+          "typeVersion": 3.2,
+          "position": [
+            192,
+            2600
+          ],
+          "id": "8ac732ea-3a09-4228-9caa-9a2c69609264",
+          "name": "Merge"
+        },
+        {
+          "parameters": {
+            "aggregate": "aggregateAllItemData",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.aggregate",
+          "typeVersion": 1,
+          "position": [
+            -384,
+            2616
+          ],
+          "id": "f6df00c8-b3c4-48d9-99ee-6ac93be7fc7a",
+          "name": "Aggregate FAZ.NET",
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "aggregate": "aggregateAllItemData",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.aggregate",
+          "typeVersion": 1,
+          "position": [
+            416,
+            2616
+          ],
+          "id": "0c42de3c-adae-4e8b-8271-02b2fd38def5",
+          "name": "Aggregate"
+        },
+        {
+          "parameters": {
+            "promptType": "define",
+            "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n\n{{ $json.data.map(item => item.text).join(\"\\n\\n---\\n\\n\") }}",
+            "needsFallback": true,
+            "messages": {
+              "messageValues": []
+            },
+            "batching": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.chainLlm",
+          "typeVersion": 1.9,
+          "position": [
+            640,
+            2616
+          ],
+          "id": "1619ebd9-8a19-4fe7-b5a1-6604082e97fd",
+          "name": "Write Report"
+        },
+        {
+          "parameters": {
+            "promptType": "define",
+            "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: Frankfurter Allgemeine Zeitung (FAZ) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+            "needsFallback": true,
+            "messages": {
+              "messageValues": []
+            },
+            "batching": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.chainLlm",
+          "typeVersion": 1.9,
+          "position": [
+            -160,
+            2512
+          ],
+          "id": "4073e791-1794-4b92-a842-cad1672235f2",
+          "name": "Summarize FAZ"
+        },
+        {
+          "parameters": {
+            "url": "https://www.tagesschau.de/inland/index~rss2.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            -832,
+            2224
+          ],
+          "id": "057f6bf1-4822-45e4-821a-847e3460433b",
+          "name": "RSS Tagesschau Inland",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://www.tagesschau.de/wirtschaft/index~rss2.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            -832,
+            2032
+          ],
+          "id": "88506d04-c782-4e85-9ab6-72f66eb3b0e1",
+          "name": "RSS Tagesschau Wirtschaft",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://www.tagesschau.de/ausland/index~rss2.xml",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            -832,
+            1840
+          ],
+          "id": "ebe78668-d11e-42e3-98da-8a0c1c098d09",
+          "name": "RSS Tagesschau Ausland",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "mode": "combineBySql",
+            "numberInputs": 3,
+            "query": "SELECT title, link, content, isoDate\nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input3\nWHERE title IS NOT NULL;",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.merge",
+          "typeVersion": 3.2,
+          "position": [
+            -608,
+            2024
+          ],
+          "id": "70fddcf0-a35d-4979-958e-d1c41d52f69e",
+          "name": "Merge Tagesschau"
+        },
+        {
+          "parameters": {
+            "aggregate": "aggregateAllItemData",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.aggregate",
+          "typeVersion": 1,
+          "position": [
+            -384,
+            2040
+          ],
+          "id": "147da2b6-ea38-4788-87f4-e084a7d0497f",
+          "name": "Aggregate Tagesschau",
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "promptType": "define",
+            "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: Frankfurter Allgemeine Zeitung (FAZ) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+            "needsFallback": true,
+            "messages": {
+              "messageValues": []
+            },
+            "batching": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.chainLlm",
+          "typeVersion": 1.9,
+          "position": [
+            -160,
+            2040
+          ],
+          "id": "e371848f-949a-4233-926c-cf2d49277fed",
+          "name": "Summarize Tagesschau"
+        },
+        {
+          "parameters": {
+            "model": "mistral-small-latest",
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+          "typeVersion": 1,
+          "position": [
+            -152,
+            2264
+          ],
+          "id": "23bf559c-450f-430f-83e1-5fddda71716b",
+          "name": "mistral-small-latest (1)",
+          "credentials": {
+            "mistralCloudApi": {
+              "id": "w613RN8tRYhy269h",
+              "name": "Mistral API"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": {
+              "__rl": true,
+              "value": "claude-haiku-4-5-20251001",
+              "mode": "list",
+              "cachedResultName": "Claude Haiku 4.5"
+            },
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+          "typeVersion": 1.5,
+          "position": [
+            -24,
+            2264
+          ],
+          "id": "f32db991-a466-499e-bd39-2e7af3a6cdfd",
+          "name": "Claude Haiku 4.5 (1)",
+          "credentials": {
+            "anthropicApi": {
+              "id": "0jqTAeHMP0aAlV8t",
+              "name": "Claude n8n-api"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": "mistral-small-latest",
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+          "typeVersion": 1,
+          "position": [
+            -152,
+            2736
+          ],
+          "id": "09ff8b1a-30f4-49c9-aa32-a95ab41950b3",
+          "name": "mistral-small-latest (2)",
+          "credentials": {
+            "mistralCloudApi": {
+              "id": "w613RN8tRYhy269h",
+              "name": "Mistral API"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": {
+              "__rl": true,
+              "value": "claude-haiku-4-5-20251001",
+              "mode": "list",
+              "cachedResultName": "Claude Haiku 4.5"
+            },
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+          "typeVersion": 1.5,
+          "position": [
+            -24,
+            2736
+          ],
+          "id": "abb70375-6f3a-4bc3-bbb5-04b0b929fdf9",
+          "name": "Claude Haiku 4.5 (2)",
+          "credentials": {
+            "anthropicApi": {
+              "id": "0jqTAeHMP0aAlV8t",
+              "name": "Claude n8n-api"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": "mistral-small-latest",
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+          "typeVersion": 1,
+          "position": [
+            648,
+            2840
+          ],
+          "id": "1e1b5e77-b083-49a3-9459-56c29a42f9c1",
+          "name": "mistral-small-latest (4)",
+          "credentials": {
+            "mistralCloudApi": {
+              "id": "w613RN8tRYhy269h",
+              "name": "Mistral API"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": {
+              "__rl": true,
+              "value": "claude-haiku-4-5-20251001",
+              "mode": "list",
+              "cachedResultName": "Claude Haiku 4.5"
+            },
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+          "typeVersion": 1.5,
+          "position": [
+            776,
+            2840
+          ],
+          "id": "e7641fe8-125c-48f0-9dd2-303aa5c0fa67",
+          "name": "Claude Haiku 4.5 (4)",
+          "credentials": {
+            "anthropicApi": {
+              "id": "0jqTAeHMP0aAlV8t",
+              "name": "Claude n8n-api"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "promptType": "define",
+            "text": "=Du bist ein erfahrener Nachrichtenredakteur. Deine Aufgabe ist es, aus gelieferten RSS-Artikeln ein strukturiertes \"Morning Briefing\" zu erstellen. Erstelle 8 Nachrichtenblöcke. \n\nZEITREGEL:\n- PRIMÄR: Nutze nur Artikel der letzten 12 Stunden als konkrete, neue Nachrichten.\n- SEKUNDÄR: Ältere Artikel dürfen ausschließlich als Hintergrundkontext verwendet werden – sie dürfen aber NICHT als eigenständige Meldung erscheinen.\n- Wenn weniger als 8 aktuelle Meldungen (< 12h) vorliegen, fülle fehlende Blöcke mit den nächstaktuelleren Themen auf und markiere diese mit (älter als 12h).\n\nDeine Regeln:  \n- Fokus auf Weltereignisse mit potentiellen Einflüssen auf ganze Regionen und Länder.  \n- Sortiere die Meldungen streng nach ihrer Wichtigkeit. \n- Die Antwort darf maximal 3.500 Zeichen haben. Kürze wenn nötig – lieber weniger Themen als zu lange Texte.  \n- Nenne für jeden Themenblock transparent den Herausgeber als Quelle.  \n- Halte dich exakt an das Format des Beispiels.\nWICHTIG: Deine Ausgabe MUSS exakt wie das folgende Beispiel formatiert sein.\n\n--- BEISPIEL START ---\n\n1) US‑Iran: Trump nach China‑Besuch – Eskalationsrisiko steigt\n- Präsident Trump prüft nach China‑Reise die Wiederaufnahme US‑Angriffe auf Iran; Berater und Kongress gespalten, Militärführung schweigt. Späte Kritik aus dem Kongress. Folge: Regionale Eskalationsgefahr bleibt hoch.\n[Quellen: FAZ, NYT, WSJ – 14.–16.05.2026]\n\n--- BEISPIEL ENDE ---\n\nHier sind die aktuellen Nachrichten zur Zusammenfassung:\n{{ $json.data.map(item => `[${item.title}]\nQuelle: Frankfurter Allgemeine Zeitung (FAZ) | ${item.isoDate}\n${item.description}\n${item.link}`).join('\\n\\n---\\n\\n') }}",
+            "needsFallback": true,
+            "messages": {
+              "messageValues": []
+            },
+            "batching": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.chainLlm",
+          "typeVersion": 1.9,
+          "position": [
+            -160,
+            3104
+          ],
+          "id": "3adf25ae-9801-41a0-8849-ed8a40177383",
+          "name": "Summarize ZDF"
+        },
+        {
+          "parameters": {
+            "aggregate": "aggregateAllItemData",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.aggregate",
+          "typeVersion": 1,
+          "position": [
+            -384,
+            3104
+          ],
+          "id": "a12516d9-31e2-4820-9aaf-b5c20b68d154",
+          "name": "Aggregate ZDF",
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "mode": "combineBySql",
+            "query": "SELECT title, link, content, isoDate\nFROM input1\nWHERE title IS NOT NULL\nUNION\nSELECT title, link, content, isoDate \nFROM input2\nWHERE title IS NOT NULL;",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.merge",
+          "typeVersion": 3.2,
+          "position": [
+            -608,
+            3104
+          ],
+          "id": "1da05471-49f2-480f-85f3-449c65cfcf27",
+          "name": "Merge ZDF"
+        },
+        {
+          "parameters": {
+            "model": "mistral-small-latest",
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+          "typeVersion": 1,
+          "position": [
+            -152,
+            3328
+          ],
+          "id": "4ccffa02-27c8-4ddf-9760-7a21998e8f7c",
+          "name": "mistral-small-latest (3)",
+          "credentials": {
+            "mistralCloudApi": {
+              "id": "w613RN8tRYhy269h",
+              "name": "Mistral API"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "model": {
+              "__rl": true,
+              "value": "claude-haiku-4-5-20251001",
+              "mode": "list",
+              "cachedResultName": "Claude Haiku 4.5"
+            },
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+          "typeVersion": 1.5,
+          "position": [
+            -24,
+            3328
+          ],
+          "id": "3e8943c4-4913-46f5-b76f-b8b23b25d58f",
+          "name": "Claude Haiku 4.5 (3)",
+          "credentials": {
+            "anthropicApi": {
+              "id": "0jqTAeHMP0aAlV8t",
+              "name": "Claude n8n-api"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "url": "https://www.zdf.de/rss/zdf/politik",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            -832,
+            3000
+          ],
+          "id": "c1a61def-11d2-4530-8b47-55edb7da0852",
+          "name": "RSS ZDF Politik",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        },
+        {
+          "parameters": {
+            "url": "https://www.zdf.de/rss/zdf/nachrichten",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.rssFeedRead",
+          "typeVersion": 1.2,
+          "position": [
+            -832,
+            3200
+          ],
+          "id": "4c465190-5346-4f62-8970-651466663739",
+          "name": "RSS ZDF Nachrichten",
+          "onError": "continueRegularOutput",
+          "notes": "Error handling and cleaning of wrong data happens in the merge node"
+        }
+      ],
+      "connections": {
+        "Schedule Trigger": {
+          "main": [
+            [
+              {
+                "node": "RSS FAZ.NET USA",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS FAZ.NET Inland",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS FAZ.NET Ausland",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS Tagesschau Inland",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS Tagesschau Wirtschaft",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS Tagesschau Ausland",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS ZDF Politik",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "RSS ZDF Nachrichten",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "RSS FAZ.NET USA": {
+          "main": [
+            [
+              {
+                "node": "Merge FAZ.NET",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "RSS FAZ.NET Inland": {
+          "main": [
+            [
+              {
+                "node": "Merge FAZ.NET",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "RSS FAZ.NET Ausland": {
+          "main": [
+            [
+              {
+                "node": "Merge FAZ.NET",
+                "type": "main",
+                "index": 2
+              }
+            ]
+          ]
+        },
+        "Merge FAZ.NET": {
+          "main": [
+            [
+              {
+                "node": "Aggregate FAZ.NET",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Merge": {
+          "main": [
+            [
+              {
+                "node": "Aggregate",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Aggregate FAZ.NET": {
+          "main": [
+            [
+              {
+                "node": "Summarize FAZ",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Aggregate": {
+          "main": [
+            [
+              {
+                "node": "Write Report",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Write Report": {
+          "main": [
+            [
+              {
+                "node": "Send Summary Sören",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Send Summary Susanne",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Summarize FAZ": {
+          "main": [
+            [
+              {
+                "node": "Merge",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "RSS Tagesschau Inland": {
+          "main": [
+            [
+              {
+                "node": "Merge Tagesschau",
+                "type": "main",
+                "index": 2
+              }
+            ]
+          ]
+        },
+        "RSS Tagesschau Wirtschaft": {
+          "main": [
+            [
+              {
+                "node": "Merge Tagesschau",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "RSS Tagesschau Ausland": {
+          "main": [
+            [
+              {
+                "node": "Merge Tagesschau",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Merge Tagesschau": {
+          "main": [
+            [
+              {
+                "node": "Aggregate Tagesschau",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Aggregate Tagesschau": {
+          "main": [
+            [
+              {
+                "node": "Summarize Tagesschau",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "mistral-small-latest (1)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize Tagesschau",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Claude Haiku 4.5 (1)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize Tagesschau",
+                "type": "ai_languageModel",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "mistral-small-latest (2)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize FAZ",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Claude Haiku 4.5 (2)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize FAZ",
+                "type": "ai_languageModel",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "Summarize Tagesschau": {
+          "main": [
+            [
+              {
+                "node": "Merge",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "mistral-small-latest (4)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Write Report",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Claude Haiku 4.5 (4)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Write Report",
+                "type": "ai_languageModel",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "Summarize ZDF": {
+          "main": [
+            [
+              {
+                "node": "Merge",
+                "type": "main",
+                "index": 2
+              }
+            ]
+          ]
+        },
+        "Aggregate ZDF": {
+          "main": [
+            [
+              {
+                "node": "Summarize ZDF",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Merge ZDF": {
+          "main": [
+            [
+              {
+                "node": "Aggregate ZDF",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "mistral-small-latest (3)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize ZDF",
+                "type": "ai_languageModel",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Claude Haiku 4.5 (3)": {
+          "ai_languageModel": [
+            [
+              {
+                "node": "Summarize ZDF",
+                "type": "ai_languageModel",
+                "index": 1
+              }
+            ]
+          ]
+        },
+        "RSS ZDF Politik": {
+          "main": [
+            [
+              {
+                "node": "Merge ZDF",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "RSS ZDF Nachrichten": {
+          "main": [
+            [
+              {
+                "node": "Merge ZDF",
+                "type": "main",
+                "index": 1
+              }
+            ]
+          ]
+        }
+      },
+      "authors": "Sören Panten",
+      "name": "v1.0",
+      "description": "Initial publish",
+      "autosaved": false
+    },
+    "tags": []
+  }
+]
